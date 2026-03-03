@@ -65,7 +65,8 @@ type ToolHandler = {
   name: string;
   description: string;
   inputSchema: z.ZodTypeAny;
-  handler: (input: unknown) => Promise<unknown>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  handler: (input: any) => Promise<unknown>;
 };
 
 const allTools: ToolHandler[] = [
