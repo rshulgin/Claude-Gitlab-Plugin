@@ -382,9 +382,9 @@ async function requestHandler(
   }
 
   // ── MCP endpoint ─────────────────────────────────────────────────────────
-  if (req.method !== "POST" || req.url !== "/mcp") {
+  if (req.url !== "/mcp") {
     res.writeHead(404, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ error: "Not found. Use POST /mcp" }));
+    res.end(JSON.stringify({ error: "Not found. Use /mcp" }));
     return;
   }
 
@@ -393,8 +393,8 @@ async function requestHandler(
     sessionIdGenerator: undefined, // stateless
   });
   await server.connect(transport);
-  const raw = await readBodyRaw(req);
-  await transport.handleRequest(req, res, raw ? JSON.parse(raw) : {});
+  const raw = req.method === "POST" ? await readBodyRaw(req) : undefined;
+  await transport.handleRequest(req, res, raw ? JSON.parse(raw) : undefined);
   await server.close();
 }
 
